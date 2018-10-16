@@ -19,22 +19,33 @@ class TaskVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
     //Variables
     var tasks = [Task]()
     
-
     //Constants
     
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        checkTasks()
+        getData()
         navigationController?.navigationBar.prefersLargeTitles = true
         // [START setup]
 
         checkTasks()
-        
     }
     
+    @IBAction func editBtnPresed(_ sender: UIBarButtonItem) {
+        if sender.tag == 0 {
+            taskListTableView.isEditing = true
+            sender.tag = 1
+        } else {
+            taskListTableView.isEditing = false
+            sender.tag = 0
+        }
+    }
     
     override func viewDidAppear(_ animated: Bool) {
+        checkTasks()
+        getData()
         taskListTableView.reloadData()
     }
     
@@ -43,12 +54,31 @@ class TaskVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
         
     }
     
+    func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
+        return true
+    }
+    
+    func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
+        let task = tasks[sourceIndexPath.row]
+        tasks.remove(at: sourceIndexPath.row)
+        tasks.insert(task, at: destinationIndexPath.row)
+    }
+
+
+    
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            let removedTask = tasks[indexPath.row]
+            tasks.remove(at: indexPath.row)
+            context.delete(removedTask)
+            taskListTableView.reloadData()
+        }
+    }
     override func viewWillAppear(_ animated: Bool) {
         checkTasks()
         taskListTableView.reloadData()
     }
-
-    
     func checkTasks() {
         if tasks.count > 0 {
             taskListTableView.isHidden = false
@@ -65,6 +95,7 @@ class TaskVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
     }
     
     func clearTasks() {
+        deleteData()
         tasks.removeAll()
         taskListTableView.reloadData()
         checkTasks()
@@ -76,6 +107,18 @@ class TaskVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
             tasks = try context.fetch(Task.fetchRequest())
         }
         catch {
+            print("data not recieved")
+        }
+        taskListTableView.reloadData()
+    }
+    
+    func deleteData() {
+        do {
+            for task in tasks {
+                context.delete(task)
+            }
+        }
+        catch {
             
         }
         taskListTableView.reloadData()
@@ -84,20 +127,9 @@ class TaskVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
     @IBAction func clearTaskBtnPressed(_ sender: UIButton) {
         clearTasks()
     }
-    
-    
-    
 
     @IBAction func unwindToTaskList(segue: UIStoryboardSegue) {
     }
-    
-    
-    
-    
-    
-    
-    
-    
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
@@ -122,9 +154,7 @@ class TaskVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
         performSegue(withIdentifier: "editTask", sender: nil)
     }
     
-    
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
         switch segue.identifier {
         case "editTask":
@@ -141,8 +171,6 @@ class TaskVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
         default:
             print("nothing")
     }
-    
-
 }
 
 }
