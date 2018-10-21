@@ -7,8 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		241B4E35217549C100107B00 /* TitleTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 241B4E34217549C100107B00 /* TitleTextField.swift */; };
-		241B4E37217549E000107B00 /* DescriptionTextVIew.swift in Sources */ = {isa = PBXBuildFile; fileRef = 241B4E36217549E000107B00 /* DescriptionTextVIew.swift */; };
+		2409EF86217BF989007848CA /* AddTaskTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2409EF85217BF989007848CA /* AddTaskTextView.swift */; };
 		2422F430216D909B00335B8E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2422F42F216D909B00335B8E /* AppDelegate.swift */; };
 		2422F435216D909B00335B8E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2422F433216D909B00335B8E /* Main.storyboard */; };
 		2422F438216D909B00335B8E /* CoreDataToDo.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 2422F436216D909B00335B8E /* CoreDataToDo.xcdatamodeld */; };
@@ -23,8 +22,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		241B4E34217549C100107B00 /* TitleTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleTextField.swift; sourceTree = "<group>"; };
-		241B4E36217549E000107B00 /* DescriptionTextVIew.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DescriptionTextVIew.swift; sourceTree = "<group>"; };
+		2409EF85217BF989007848CA /* AddTaskTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTaskTextView.swift; sourceTree = "<group>"; };
 		2422F42C216D909B00335B8E /* CoreDataToDo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CoreDataToDo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2422F42F216D909B00335B8E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2422F434216D909B00335B8E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -94,9 +92,8 @@
 		2422F445216D90F700335B8E /* View */ = {
 			isa = PBXGroup;
 			children = (
-				241B4E36217549E000107B00 /* DescriptionTextVIew.swift */,
 				2422F44B216D913700335B8E /* MainTaskCell.swift */,
-				241B4E34217549C100107B00 /* TitleTextField.swift */,
+				2409EF85217BF989007848CA /* AddTaskTextView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -207,10 +204,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				241B4E35217549C100107B00 /* TitleTextField.swift in Sources */,
 				2422F455216D916E00335B8E /* Extensions.swift in Sources */,
-				241B4E37217549E000107B00 /* DescriptionTextVIew.swift in Sources */,
 				2422F430216D909B00335B8E /* AppDelegate.swift in Sources */,
+				2409EF86217BF989007848CA /* AddTaskTextView.swift in Sources */,
 				2422F452216D914600335B8E /* TaskCreatorVC.swift in Sources */,
 				2422F438216D909B00335B8E /* CoreDataToDo.xcdatamodeld in Sources */,
 				2422F451216D914600335B8E /* CompletedTaskVC.swift in Sources */,

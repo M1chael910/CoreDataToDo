@@ -8,21 +8,27 @@
 
 import UIKit
 
-class TaskCreatorVC: UITableViewController {
+
+
+class TaskCreatorVC: UITableViewController, UITextViewDelegate {
 
     //Outlets
-    @IBOutlet weak var titleTextField: UITextField!
-    @IBOutlet weak var descriptionTextView: UITextView!
+    
+    
+    @IBOutlet weak var titleTextView: AddTaskTextView!
+    @IBOutlet weak var descriptionTextView: AddTaskTextView!
     @IBOutlet weak var completedSwitch: UISwitch!
     @IBOutlet weak var completedLbl: UILabel!
+    @IBOutlet weak var dueDatePicker: UIDatePicker!
     @IBOutlet weak var datePicker: UIDatePicker!
     @IBOutlet weak var dateLbl: UILabel!
     @IBOutlet weak var dueDateLbl: UILabel!
-    @IBOutlet weak var dueDatePicker: UIDatePicker!
     @IBOutlet weak var saveBtn: UIBarButtonItem!
+    
     //Variables
     
     var task: Task?
+    
     //Constants
     
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
@@ -40,45 +46,48 @@ class TaskCreatorVC: UITableViewController {
             saveBtn.isEnabled = false
         }
     }
+    
+    
+    
     func displayInitialTaskProperties(from task: Task) {
-        titleTextField.text = task.title
+        titleTextView.text = task.title
         descriptionTextView.text = task.taskDescription
         datePicker.date = task.date!
         dueDatePicker.date = task.dueDate!
     }
+    
     override func viewDidAppear(_ animated: Bool) {
        updateSaveButtonState()
     }
     
     func saveProperties(task: Task) {
-        
-        if let title = titleTextField.text, let description = descriptionTextView.text {
+        if let title = titleTextView.text, let description = descriptionTextView.text {
             task.title = title
             task.taskDescription = description
         } else {
             task.title = "No Title"
             task.taskDescription = "No Description"
         }
-        task.date = datePicker.date
-        task.dueDate = dueDatePicker.date
+        task.date = datePicker.date ?? Date()
+        task.dueDate = dueDatePicker.date ?? Date()
     }
     
-    @IBAction func titleTextChanged(_ sender: UITextField) {
+    func textViewDidChange(_ textView: UITextView) {
         updateSaveButtonState()
-        if let text = sender.text {
-            updateNavItem(with: text)
-        } else {
-            updateNavItem(with: "No Title")
+        if let text = textView.text {
+            if text == "" {
+                updateNavItem(with: "Enter a task")
+            } else {
+                updateNavItem(with: text)
+            }
         }
-        
-        
     }
     
     @IBAction func completedSwitchPressed(_ sender: UISwitch) {
         if sender.isOn == true {
-            completedLbl.text = "Yes"
+            completedLbl.text = "On To the Next Task!"
         } else {
-            completedLbl.text = "No"
+            completedLbl.text = "Get To Work!"
         }
     }
     
@@ -93,6 +102,7 @@ class TaskCreatorVC: UITableViewController {
             if let destination = segue.destination as? TaskVC {
                 if let task = task {
                     saveProperties(task: task)
+                    appDelegate.saveContext()
                 } else {
                     let newTask = Task(context: context)
                     saveProperties(task: newTask)
@@ -102,10 +112,6 @@ class TaskCreatorVC: UITableViewController {
             }
         }
     }
-    
-    
-
-    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let row = tableView.visibleCells[indexPath.row]
         row.isHighlighted = false
@@ -113,7 +119,7 @@ class TaskCreatorVC: UITableViewController {
     }
     
         func updateSaveButtonState() {
-            if titleTextField.text?.isEmpty == true {
+            if titleTextView.text?.isEmpty == true {
                 saveBtn.isEnabled = false
             } else {
                 saveBtn.isEnabled = true

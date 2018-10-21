@@ -10,15 +10,17 @@ import UIKit
 
 
 class MainTaskCell: UITableViewCell {
+
+    @IBOutlet weak var taskTitleLbl: UILabel!
     @IBOutlet weak var dateLbl: UILabel!
     @IBOutlet weak var dueDateLbl: UILabel!
-    @IBOutlet weak var taskTitleLbl: UILabel!
     
-    func updateCell(task: Task) {
+    
+    func updateCell(with task: Task) {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MM/dd/yyyy"
-        dateLbl.text = "\(dateFormatter.string(from: task.date!))"
-        dueDateLbl.text = "\(dateFormatter.string(from: task.dueDate!))"
+        dateLbl.text = "\(dateFormatter.string(from: task.date ?? Date()))"
+        dueDateLbl.text = "\(dateFormatter.string(from: task.dueDate ?? Date()))"
         taskTitleLbl.text = task.title
     }
 }

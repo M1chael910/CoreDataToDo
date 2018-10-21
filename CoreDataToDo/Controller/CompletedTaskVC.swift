@@ -47,7 +47,7 @@ class CompletedTaskVC: UIViewController, UITableViewDelegate, UITableViewDataSou
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let completedTaskCell = tableView.dequeueReusableCell(withIdentifier: "MainTaskCell", for: indexPath) as! MainTaskCell
         for task in completedTasks {
-            completedTaskCell.updateCell(task: task)
+            completedTaskCell.updateCell(with: task)
         }
         return completedTaskCell
     }

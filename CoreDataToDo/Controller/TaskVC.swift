@@ -13,11 +13,13 @@ class TaskVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
     //Outlets
     
+    @IBOutlet weak var editBtn: UIBarButtonItem!
     @IBOutlet weak var taskListTableView: UITableView!
     @IBOutlet weak var taskLbl: UILabel!
     
     //Variables
-    var tasks = [Task]()
+    
+    var tasks: [Task] = []
     
     //Constants
     
@@ -25,11 +27,11 @@ class TaskVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        checkTasks()
+        checkEditBtnStatus()
         getData()
+        checkTasks()
         navigationController?.navigationBar.prefersLargeTitles = true
         // [START setup]
-
         checkTasks()
     }
     
@@ -44,6 +46,7 @@ class TaskVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
     }
     
     override func viewDidAppear(_ animated: Bool) {
+        checkEditBtnStatus()
         checkTasks()
         getData()
         taskListTableView.reloadData()
@@ -73,12 +76,15 @@ class TaskVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
             tasks.remove(at: indexPath.row)
             context.delete(removedTask)
             taskListTableView.reloadData()
+            checkTasks()
         }
     }
     override func viewWillAppear(_ animated: Bool) {
+        checkEditBtnStatus()
         checkTasks()
         taskListTableView.reloadData()
     }
+    
     func checkTasks() {
         if tasks.count > 0 {
             taskListTableView.isHidden = false
@@ -140,16 +146,25 @@ class TaskVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let mainTaskCell = tableView.dequeueReusableCell(withIdentifier: "MainTaskCell", for: indexPath) as! MainTaskCell
-        
+        let mainCell = taskListTableView.dequeueReusableCell(withIdentifier: "MainTaskCell", for: indexPath) as! MainTaskCell
         if tasks.count > 0 {
             let task = tasks[indexPath.row]
-            mainTaskCell.updateCell(task: task)
-            return mainTaskCell
+            mainCell.updateCell(with: task)
+            return mainCell
         } else {
             return MainTaskCell()
         }
     }
+    
+    func checkEditBtnStatus() {
+        if tasks.isEmpty == true {
+            editBtn.isEnabled = false
+        } else {
+            editBtn.isEnabled = true
+        }
+    }
+    
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         performSegue(withIdentifier: "editTask", sender: nil)
     }
@@ -158,9 +173,9 @@ class TaskVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
         
         switch segue.identifier {
         case "editTask":
-            let taskEditorVC = segue.destination as? TaskCreatorVC
+            let taskEditorVC = segue.destination as! TaskCreatorVC
             let selectedTask = tasks[taskListTableView.indexPathForSelectedRow!.row]
-            taskEditorVC?.task = selectedTask
+            taskEditorVC.task = selectedTask
         case "CompletedTaskVC":
             let completedTaskVC = segue.destination as? CompletedTaskVC
             for task in tasks {
@@ -169,7 +184,7 @@ class TaskVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
                 }
             }
         default:
-            print("nothing")
+            print("")
     }
 }
 
